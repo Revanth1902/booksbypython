@@ -6,10 +6,8 @@ app = Flask(__name__)
 
 BASE_URL = "http://books.toscrape.com/catalogue/page-{}.html"
 
-# In-memory storage for scraped books
 books = []
 
-# Scrape books from first N pages
 def scrape_books(max_pages=10):
     book_id = 1
     all_books = []
@@ -23,12 +21,12 @@ def scrape_books(max_pages=10):
         for book in articles:
             title = book.h3.a["title"]
             price = book.select_one("p.price_color").text.strip()
-            rating = book.p["class"][1]  # e.g. "Three"
+            rating = book.p["class"][1]  
             relative_url = book.h3.a["href"]
             full_url = "http://books.toscrape.com/catalogue/" + relative_url
             availability = book.select_one("p.instock.availability").text.strip()
 
-            # Fetch book detail page for image and description
+
             detail_res = requests.get(full_url)
             if detail_res.status_code != 200:
                 continue
